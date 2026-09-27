@@ -148,5 +148,39 @@ success
   answers are keyed only by stable qestion ids
   11111111-1111-4111-8111-111111111111 11111111 1111 4111 8111-111111111112
   22222222-2222-4222-8222-222222222222 a survey api
-  drafts may omit required answer but every present answer is fully validated this implementation rejects answer for currently hidden question rather than silently storing them final submission requires every visible required answer ignores hidden questions for requiredness and rejects unknown ids forged options invalid types duplicate multi select values and rating outside integar 
- 
+  drafts may omit required answer but every present answer is fully validated this implementation rejects answer for currently hidden question rather than silently storing them final submission requires every visible required answer ignores hidden questions for requiredness and rejects unknown ids forged options invalid types duplicate multi select values and rating outside integer
+  when acceptingresponses=false public reads and existing draft restoration remain available draft write and submission return reopening resumes the same cookie session submitted responses are immutable and duplicate submission return 
+  analytics
+  only submitted rows count text return non empty answer lists selects return every current option including zero counts multi select increments every selected option rating returns count plus average or null the analytics service is isolated so in memory assignment scale calculation can later become sql aggregation or precomputation
+  testing and quality commands
+  backend
+  pnpm format check
+  pnpm lint 
+  pnpm typecheck
+  pnpm test unit 
+  pnpm test integration 
+  pnpm tet
+  pnpm build 
+  frontend
+  cd client 
+  pnpm lint 
+  pnpm exec tsc noemit
+  pnpm build
+  unit test cover the discriminated definition id uniqueness conditional integrity ordering cycle dynamic draft final answer rules rating options types analytics ownership crud anonymous cookie reuse draft upsert restoration close reopen rules validation immutable submission schema locking analytics draft exclusion cascades and real redis limiting
+  security decisions 
+  passwords use bcrypt cost 12 refresh verification and respondent tokens are cryptographically random and stored only as sha 256 hashes
+  access tokens are short lived both refresh and respondent tokens use httponly cokkies secure plus samesite none in production and samesite lax locally
+  cors permits the configured client origin with credentials helmet a 100kb json limit strict zod parsing central malformed json handling and deliberate proxy configuration are enable 
+  ip is only a redis spam control signal never respondent identity database uniqueness remain the duplicate session guarantee
+  public responses never reveal cookie tokens respondent session ids creator data or internal response relationships 
+  decision assumptions limitations and trade offs 
+  jsonb makes dynamic schemas rendering and question reordering simple but postgresql cannot enforce every nasted rule as naturally as normalized question tables
+  zod and backend domain validation are therefore authoritative stored definitions are also parsed when read 
+  jsonb analytics are more complex than normalized relational aggregation current analytics are intentionally computed in the isolated service for assignment scale data 
+  schema editing is locked after the first submitted response instead of implementing survey versioning metadata and availability remain editable 
+  anonymous cookie sessions support draft restoration but do not represent verified identity 
+  clearing cookie using incognito or switching browsers can create another anonymous session and lose access to the previous draft 
+  ip rate limiting reduces spam but cannot guarantee one human response shard networks can share a limit and distributed attackers can route ips 
+  analytics are computed only from submitted responses draft never affect totals or insights
+  the design is intentionally scoped for a 12 24 hours assignment while keeping domain boundaries replaceable and scalable 
+  additional limitations one condition per question fixed rating from 1 5 no survey version history and no verified respondent identity a deployed frontend also requires a publicly deployed postgresql redis backed api a static frontend deployment cannot reach the local docker services password reset routes were not present in photodeys implement router and are not invented here its implemented email verification session architecture was adapted directly 
