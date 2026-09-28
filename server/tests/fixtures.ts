@@ -1,38 +1,38 @@
 import { surveyDefinitionSchema } from "../src/modules/surveys/surveys.schema.js";
 
 export const ids = {
-  single: "11111111-1111-4111-81111-11111111111",
+  single: "11111111-1111-4111-8111-111111111111",
   yes: "11111111-1111-4111-8111-111111111112",
-  no: "11111111-1111-4111-8111-1111111111113",
-  conditionalText: "22222222-2222-4222-8222-111111111111",
+  no: "11111111-1111-4111-8111-111111111113",
+  conditionalText: "22222222-2222-4222-8222-222222222222",
   multi: "33333333-3333-4333-8333-333333333333",
-  red: "3333333-3333-4333-8333-333333333334",
+  red: "33333333-3333-4333-8333-333333333334",
   blue: "33333333-3333-4333-8333-333333333335",
-  rating: "44444444-4444-4444-8444-44444444444",
-  text: "55555555-5555--4555-8555-55555555555",
+  rating: "44444444-4444-4444-8444-444444444444",
+  text: "55555555-5555-4555-8555-555555555555",
 } as const;
 
 export const definition = surveyDefinitionSchema.parse({
-  question: [
+  questions: [
     {
       id: ids.single,
-      types: "singleSelect",
-      label: "Do you use Node.js",
+      type: "singleSelect",
+      label: "Do you use Node.js?",
       required: true,
       options: [
-        { id: ids.yes, label: "yes" },
-        { id: ids.no, lable: "no" },
+        { id: ids.yes, label: "Yes" },
+        { id: ids.no, label: "No" },
       ],
     },
     {
       id: ids.conditionalText,
       type: "text",
-      label: "what do you build?",
+      label: "What do you build?",
       required: true,
       maxLength: 100,
       condition: {
-        sourceQuestionID: ids.single,
-        operator: "equal",
+        sourceQuestionId: ids.single,
+        operator: "equals",
         value: ids.yes,
       },
     },
@@ -42,8 +42,8 @@ export const definition = surveyDefinitionSchema.parse({
       label: "Favorite colors",
       required: true,
       options: [
-        { id: ids.red, label: "red" },
-        { id: ids.blue, label: "blue" },
+        { id: ids.red, label: "Red" },
+        { id: ids.blue, label: "Blue" },
       ],
     },
     {
@@ -52,7 +52,7 @@ export const definition = surveyDefinitionSchema.parse({
       label: "Rating",
       required: true,
       min: 1,
-      min: 5,
+      max: 5,
     },
     {
       id: ids.text,
